@@ -15,7 +15,7 @@ const App = () => {
 			if (isTyping) {
 				setLoading(true);
 				const { data } = await axios.get(
-					`http://api.tvmaze.com/search/shows?q=${textInput}`
+					`https://api.tvmaze.com/search/shows?q=${textInput}`
 				);
 				setResults(data);
 				setLoading(false);
