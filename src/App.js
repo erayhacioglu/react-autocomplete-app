@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect,useRef } from 'react';
 import './App.css';
 import axios from 'axios';
 import SkeletonLoading from './SkeletonLoading';
@@ -7,9 +7,23 @@ const App = () => {
 	const [textInput, setTextInput] = useState('');
 	const [results, setResults] = useState([]);
 	const [loading, setLoading] = useState(false);
+	const searchRef = useRef();
 
 	const isTyping = textInput.replace(/\s+/, '').length > 0;
+	
+	useEffect(() => {
+		document.addEventListener('mousedown', handleClickOutside);
+		return () => {
+			document.removeEventListener('mousedown', handleClickOutside);
+		};
+	}, []);
 
+	const handleClickOutside = (e) => {
+		if (searchRef.current && !searchRef.current.contains(e.target)) {
+			setTextInput('');
+		}
+	};
+	
 	useEffect(() => {
 		const getData = async () => {
 			if (isTyping) {
@@ -30,7 +44,7 @@ const App = () => {
 	};
 
 	return (
-		<div className='search-box'>
+		<div className='search-box' ref={searchRef}>
 			<input
 				className={`search-input ${isTyping && 'typing'}`}
 				placeholder='enter the show'
